@@ -18,6 +18,24 @@ type TorrentFile struct {
 	Name					string
 }
 
+func Open(filePath string) (TorrentFile, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return TorrentFile{}, err
+	}
+
+	// 等待 Open 函数结束，会自动执行 file.Close()
+	defer file.Close()
+
+	bt := bencodeTorrent{}
+	// 解析种子文件结构，并将对应的字段写入到 bt 中
+	err = bencode.Unmarshal(file, &bt)
+	if err != nil {
+		return TorrentFile{}, err
+	}
+	return bt.toTorrentFile()
+}
+
 type bencodeInfo struct {
 	Pieces				string	`bencode:"pieces"`
 	PieceLength		int			`bencode:"pieces length"`
@@ -58,24 +76,6 @@ func (bi *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
 type bencodeTorrent struct {
 	Announce	string			`bencode:"announce"`
 	Info			bencodeInfo	`bencode:"info"`
-}
-
-func Open(filePath string) (TorrentFile, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return TorrentFile{}, err
-	}
-
-	// 等待 Open 函数结束，会自动执行 file.Close()
-	defer file.Close()
-
-	bt := bencodeTorrent{}
-	// 解析种子文件结构，并将对应的字段写入到 bt 中
-	err = bencode.Unmarshal(file, &bt)
-	if err != nil {
-		return TorrentFile{}, err
-	}
-	return bt.toTorrentFile()
 }
 
 func (bt *bencodeTorrent) toTorrentFile() (TorrentFile, error) {
