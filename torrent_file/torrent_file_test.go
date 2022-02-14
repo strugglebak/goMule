@@ -14,10 +14,10 @@ import (
 var update = flag.Bool("update", false, "update .golden.json files")
 
 func TestOpen(t *testing.T) {
-	testTorrent, err := Open("test_data/archlinux-2019.12.01-x86_64.iso.torrent")
+	testTorrent, err := Open("../test_data/archlinux-2019.12.01-x86_64.iso.torrent")
 	require.Nil(t, err)
 
-	goldenJsonPath := "test_data/archlinux-2019.12.01-x86_64.iso.torrent.golden.json"
+	goldenJsonPath := "../test_data/archlinux-2019.12.01-x86_64.iso.torrent.golden.json"
 	if *update {
 		serialized, err := json.MarshalIndent(testTorrent, "", "  ")
 		require.Nil(t, err)
