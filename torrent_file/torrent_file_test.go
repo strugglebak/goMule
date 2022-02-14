@@ -39,7 +39,7 @@ func TestToTorrentFile(t *testing.T) {
 	tests := map[string] struct {
 		input 	*bencodeTorrent
 		output	TorrentFile
-		fails	bool
+		fails		bool
 	} {
 		"correct conversion": {
 			input: &bencodeTorrent {
@@ -55,8 +55,8 @@ func TestToTorrentFile(t *testing.T) {
 				Announce: "http://bttracker.debian.org:6969/announce",
 				InfoHash: [20]byte { 183, 161, 12, 130, 76, 207, 59, 26, 19, 131, 12, 89, 56, 129, 45, 111, 83, 71, 10, 68 },
 				PieceHashes: [][20]byte {
-					{49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106 },
-					{97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48 },
+					{ 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106 },
+					{ 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48 },
 				},
 				PieceLength: 262144,
 				Length:      351272960,
