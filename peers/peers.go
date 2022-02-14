@@ -19,8 +19,13 @@ func (p Peer) String() string {
 }
 
 // 从 buffer 中解析出 peer IP 和 Port
+// buffer 是这样存 IP 和 Port 的
+// [192.168.1.1:6881, ...]
+// ↓
+// ---------------------------------------
+// |192| |168| |1| |1| |0x1A| |0xE1| |...|
+// ---------------------------------------
 func Unmarshal(buffer []byte)([]Peer, error) {
-	// 4 个 IP, 2 个 Port
 	const peerSize = 6
 	count := len(buffer) / peerSize
 
