@@ -11,9 +11,7 @@ import (
 	torrentFile "github.com/strugglebak/goMule/torrent_file"
 )
 
-type TorrentFile struct {
-	*torrentFile.TorrentFile
-}
+type TorrentFile torrentFile.TorrentFile
 
 type bencodeTrackerResponse struct {
 	Interval	int			`bencode:"interval"`
