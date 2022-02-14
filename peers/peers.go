@@ -11,6 +11,7 @@ type Peer struct {
 	IP 		net.IP
 	Port	uint16
 }
+// 返回 host:port 这种字符串
 func (p Peer) String() string {
 	return net.JoinHostPort(
 		p.IP.String(),
@@ -25,6 +26,7 @@ func (p Peer) String() string {
 // ---------------------------------------
 // |192| |168| |1| |1| |0x1A| |0xE1| |...|
 // ---------------------------------------
+// 所以一个 peerSize 就是 6
 func Unmarshal(buffer []byte)([]Peer, error) {
 	const peerSize = 6
 	count := len(buffer) / peerSize
