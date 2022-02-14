@@ -10,7 +10,7 @@ import (
 	peers "github.com/strugglebak/goMule/peers"
 )
 
-func TestbuildTrackerURL(t *testing.T) {
+func TestBuildTrackerURL(t *testing.T) {
 	torrentFile := TorrentFile {
 		Announce: "http://bttracker.debian.org:6969/announce",
 		InfoHash: [20]byte { 183, 161, 12, 130, 76, 207, 59, 26, 19, 131, 12, 89, 56, 129, 45, 111, 83, 71, 10, 68 },
@@ -26,7 +26,7 @@ func TestbuildTrackerURL(t *testing.T) {
 	peerID := [20]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 	const port uint16 = 6882
 	url, err := torrentFile.buildTrackerURL(peerID, port)
-	expected := "http://bttracker.debian.org:6969/announce?compact=1&downloaded=0&info_hash=%D8%F79%CE%C3%28%95l%CC%5B%BF%1F%86%D9%FD%CF%DB%A8%CE%B6&left=351272960&peer_id=%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F%10%11%12%13%14&port=6881&uploaded=0"
+	expected := "http://bttracker.debian.org:6969/announce?compact=1&downloaded=0&info_hash=%B7%A1%0C%82L%CF%3B%1A%13%83%0CY8%81-oSG%0AD&left=351272960&peer_id=%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F%10%11%12%13%14&port=6882&uploaded=0"
 	assert.Nil(t, err)
 	assert.Equal(t, url, expected)
 }
