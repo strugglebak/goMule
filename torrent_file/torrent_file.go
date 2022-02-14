@@ -69,7 +69,6 @@ func (bi *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
 	for i := 0; i < count; i++ {
 		copy(pieceHashes[i][:], buffer[i*hashLength : (i+1)*hashLength])
 	}
-
 	return pieceHashes, nil
 }
 
