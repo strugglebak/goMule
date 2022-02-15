@@ -10,7 +10,13 @@ type Handshake struct {
 	InfoHash 						[20]byte
 	PeerID							[20]byte
 }
-// 序列化 handshake 数据成一个 字节数组
+// 序列化 handshake 数据，结果为
+// ------------------------------------------------------------------------------
+// |ProtocolIdentifier length| |ProtocolIdentifier| |reserve| |InfoHash| |PeerID|
+// ------------------------------------------------------------------------------
+//           ↓                           ↓              ↓         ↓         ↓
+//        1 byte    ProtocolIdentifier length byte     8 byte   20 byte   20 byte
+// 这样的一个字节数组
 func (handshake *Handshake) Serialize() []byte {
 	// 1. InfoHash 20 个字节
 	// 2. PeerID 20 个字节
@@ -32,24 +38,16 @@ func (handshake *Handshake) Serialize() []byte {
 	return buffer
 }
 
-func BuildHandshake(infoHash, peerID [20]byte) *Handshake {
-	return &Handshake{
-		ProtocolIdentifier: "BitTorrent protocol",
-		InfoHash: infoHash,
-		PeerID: peerID,
-	}
-}
-
 // 从 stream 中解析 handshake
 func Read(reader io.Reader) (*Handshake, error) {
-	// 先解析这个 handshake 有多长
+	// 先解析这个 handshake 的 ProtocolIdentifier 有多长
 	lengthBuffer := make([]byte, 1)
 	_, err := io.ReadFull(reader, lengthBuffer)
 	if err != nil {
 		return nil, err
 	}
 
-	// 根据 handshake 有多长得到 protocolIdentifierLength
+	// 根据 handshake 的 ProtocolIdentifier 有多长得到 protocolIdentifierLength
 	protocolIdentifierLength := int(lengthBuffer[0])
 	if protocolIdentifierLength == 0 {
 		err = fmt.Errorf("protocol identifier string length cannot be 0")
@@ -77,4 +75,12 @@ func Read(reader io.Reader) (*Handshake, error) {
 	}
 
 	return &handshake, nil
+}
+
+func BuildHandshake(infoHash, peerID [20]byte) *Handshake {
+	return &Handshake{
+		ProtocolIdentifier: "BitTorrent protocol",
+		InfoHash: infoHash,
+		PeerID: peerID,
+	}
 }
