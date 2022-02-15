@@ -11,7 +11,7 @@ type Handshake struct {
 	PeerID							[20]byte
 }
 // 序列化 handshake 数据成一个 字节数组
-func (handshake *Handshake) serialize() []byte {
+func (handshake *Handshake) Serialize() []byte {
 	// 1. InfoHash 20 个字节
 	// 2. PeerID 20 个字节
 	// 3. 保留 8 个字节
@@ -32,7 +32,7 @@ func (handshake *Handshake) serialize() []byte {
 	return buffer
 }
 
-func buildHandshake(infoHash, peerID [20]byte) *Handshake {
+func BuildHandshake(infoHash, peerID [20]byte) *Handshake {
 	return &Handshake{
 		ProtocolIdentifier: "BitTorrent protocol",
 		InfoHash: infoHash,
@@ -41,7 +41,7 @@ func buildHandshake(infoHash, peerID [20]byte) *Handshake {
 }
 
 // 从 stream 中解析 handshake
-func read(reader io.Reader) (*Handshake, error) {
+func Read(reader io.Reader) (*Handshake, error) {
 	// 先解析这个 handshake 有多长
 	lengthBuffer := make([]byte, 1)
 	_, err := io.ReadFull(reader, lengthBuffer)

@@ -43,7 +43,7 @@ func TestSerialize(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		buffer := test.input.serialize()
+		buffer := test.input.Serialize()
 		assert.Equal(t, test.output, buffer)
 	}
 }
@@ -55,7 +55,7 @@ func TestBuildHandshake(t *testing.T) {
 	peerID := [20]byte{
 		1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
 	}
-	handshake := buildHandshake(infoHash, peerID)
+	handshake := BuildHandshake(infoHash, peerID)
 	expected := &Handshake{
 		ProtocolIdentifier: "BitTorrent protocol",
 		InfoHash: 					[20]byte{
@@ -112,7 +112,7 @@ func TestRead(t *testing.T) {
 
 	for _, test := range tests {
 		reader := bytes.NewReader(test.input)
-		handshake, err := read(reader)
+		handshake, err := Read(reader)
 		if test.fails {
 			assert.NotNil(t, err)
 		} else {

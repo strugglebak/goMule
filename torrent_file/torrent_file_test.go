@@ -80,7 +80,7 @@ func TestToTorrentFile(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		torrentFile, err := test.input.toTorrentFile()
+		torrentFile, err := test.input.ToTorrentFile()
 		if test.fails {
 			assert.NotNil(t, err)
 		} else {

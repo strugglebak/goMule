@@ -33,7 +33,7 @@ func Open(filePath string) (TorrentFile, error) {
 	if err != nil {
 		return TorrentFile{}, err
 	}
-	return bt.toTorrentFile()
+	return bt.ToTorrentFile()
 }
 
 type bencodeInfo struct {
@@ -42,7 +42,7 @@ type bencodeInfo struct {
 	Length				int			`bencode:"length"`
 	Name					string	`bencode:"name"`
 }
-func (bi *bencodeInfo) generateInfoHash() ([20]byte, error) {
+func (bi *bencodeInfo) GenerateInfoHash() ([20]byte, error) {
 	var buffer bytes.Buffer
 	// 将 bencodeInfo encode 并写入到 buffer 中
 	err := bencode.Marshal(&buffer, *bi)
@@ -54,7 +54,7 @@ func (bi *bencodeInfo) generateInfoHash() ([20]byte, error) {
 	infoHash := sha1.Sum(buffer.Bytes())
 	return infoHash, nil
 }
-func (bi *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
+func (bi *bencodeInfo) SplitPieceHashes() ([][20]byte, error) {
 	hashLength := 20
 	buffer := []byte(bi.Pieces)
 	// 检查 Pieces 长度是否是 bencodeInfo hash 的长度的倍数
@@ -77,12 +77,12 @@ type bencodeTorrent struct {
 	Info			bencodeInfo	`bencode:"info"`
 }
 
-func (bt *bencodeTorrent) toTorrentFile() (TorrentFile, error) {
-	infoHash, err := bt.Info.generateInfoHash()
+func (bt *bencodeTorrent) ToTorrentFile() (TorrentFile, error) {
+	infoHash, err := bt.Info.GenerateInfoHash()
 	if err != nil {
 		return TorrentFile{}, err
 	}
-	pieceHashes, err := bt.Info.splitPieceHashes()
+	pieceHashes, err := bt.Info.SplitPieceHashes()
 	if err != nil {
 		return TorrentFile{}, err
 	}
