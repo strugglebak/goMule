@@ -64,14 +64,14 @@ func (t *TorrentFile) DownloadAndSaveTorrentFile(savePath string, port uint16) e
 		return err
 	}
 
-	outFile, err := os.Create(savePath)
+	file, err := os.Create(savePath)
 	if err != nil {
 		return err
 	}
 
-	defer outFile.Close()
+	defer file.Close()
 
-	_, err = outFile.Write(buffer)
+	_, err = file.Write(buffer)
 	if err != nil {
 		return err
 	}
