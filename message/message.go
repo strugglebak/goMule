@@ -115,12 +115,12 @@ func Read(reader io.Reader) (*Message, error) {
 }
 
 func FormatMessageRequest(index, begin, length int) *Message {
-	const payloadLength = 12
-	payload := make([]byte, payloadLength)
+	const PayloadLength = 12
+	payload := make([]byte, PayloadLength)
 
-	binary.BigEndian.PutUint32(payload[0 : payloadLength/3], uint32(index))
-	binary.BigEndian.PutUint32(payload[payloadLength/3 : payloadLength/3*2], uint32(begin))
-	binary.BigEndian.PutUint32(payload[payloadLength/3*2 : payloadLength], uint32(length))
+	binary.BigEndian.PutUint32(payload[0 : PayloadLength/3], uint32(index))
+	binary.BigEndian.PutUint32(payload[PayloadLength/3 : PayloadLength/3*2], uint32(begin))
+	binary.BigEndian.PutUint32(payload[PayloadLength/3*2 : PayloadLength], uint32(length))
 
 	return &Message{
 		ID: MessageRequest,
@@ -129,8 +129,8 @@ func FormatMessageRequest(index, begin, length int) *Message {
 }
 
 func FormatMessageHave(index int) *Message {
-	const payloadLength = 4
-	payload := make([]byte, payloadLength)
+	const PayloadLength = 4
+	payload := make([]byte, PayloadLength)
 	binary.BigEndian.PutUint32(payload, uint32(index))
 	return &Message{
 		ID: MessageHave,
@@ -147,16 +147,16 @@ func ParsePiece(index int, buffer []byte, message *Message) (int, error) {
 		return 0, fmt.Errorf("payload too short. %d < 8", len(message.Payload))
 	}
 
-	const payloadLength = 12
-	parsedIndex := int(binary.BigEndian.Uint32(message.Payload[0 : payloadLength/3]))
+	const PayloadLength = 12
+	parsedIndex := int(binary.BigEndian.Uint32(message.Payload[0 : PayloadLength/3]))
 	if parsedIndex != index {
 		return 0, fmt.Errorf("expected index %d, got %d", index, parsedIndex)
 	}
-	parsedBegin := int(binary.BigEndian.Uint32(message.Payload[payloadLength/3 : payloadLength/3*2]))
+	parsedBegin := int(binary.BigEndian.Uint32(message.Payload[PayloadLength/3 : PayloadLength/3*2]))
 	if parsedBegin >= len(buffer) {
 		return 0, fmt.Errorf("begin offset too high. %d >= %d", parsedBegin, len(buffer))
 	}
-	parsedData := message.Payload[payloadLength/3*2:]
+	parsedData := message.Payload[PayloadLength/3*2:]
 	if parsedBegin+len(parsedData) > len(buffer) {
 			return 0, fmt.Errorf(
 				"parsed data too long [%d] for offset %d with length %d",

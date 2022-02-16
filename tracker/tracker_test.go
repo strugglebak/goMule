@@ -24,8 +24,8 @@ func TestBuildTrackerURL(t *testing.T) {
 	}
 
 	peerID := [20]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
-	const port uint16 = 6882
-	url, err := torrentFile.buildTrackerURL(peerID, port)
+	const Port uint16 = 6882
+	url, err := torrentFile.buildTrackerURL(peerID, Port)
 	expected := "http://bttracker.debian.org:6969/announce?compact=1&downloaded=0&info_hash=%B7%A1%0C%82L%CF%3B%1A%13%83%0CY8%81-oSG%0AD&left=351272960&peer_id=%01%02%03%04%05%06%07%08%09%0A%0B%0C%0D%0E%0F%10%11%12%13%14&port=6882&uploaded=0"
 	assert.Nil(t, err)
 	assert.Equal(t, url, expected)
@@ -58,12 +58,12 @@ func TestRequestPeers(t *testing.T) {
 		Name:        "debian-10.2.0-amd64-netinst.iso",
 	}
 	peerID := [20]byte{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 }
-	const port uint16 = 6882
+	const Port uint16 = 6882
 	expected := []peers.Peer{
 		{IP: net.IP{ 192, 0, 2, 123 }, Port: 6881 },
 		{IP: net.IP{ 127, 0, 0, 1 }, Port: 6889 },
 	}
-	p, err := torrentFile.requestPeers(peerID, port)
+	p, err := torrentFile.requestPeers(peerID, Port)
 	assert.Nil(t, err)
 	assert.Equal(t, expected, p)
 }

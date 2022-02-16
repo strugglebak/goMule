@@ -22,16 +22,16 @@ func (handshake *Handshake) Serialize() []byte {
 	// 2. PeerID 20 个字节
 	// 3. 保留 8 个字节
 	// 4. 1 个字节表示整个 handshake 的长度 length
-	const offset = 20 + 20 + 8 + 1
-	const reserveLength = 8
-	buffer := make([]byte, len(handshake.ProtocolIdentifier)+offset)
+	const Offset = 20 + 20 + 8 + 1
+	const ReserveLength = 8
+	buffer := make([]byte, len(handshake.ProtocolIdentifier)+Offset)
 
 	buffer[0] = byte(len(handshake.ProtocolIdentifier))
 
 	index := 1
 	index += copy(buffer[index:], handshake.ProtocolIdentifier)
 	// 保留 8 个字节
-	index += copy(buffer[index:], make([]byte, reserveLength))
+	index += copy(buffer[index:], make([]byte, ReserveLength))
 	index += copy(buffer[index:], handshake.InfoHash[:])
 	index += copy(buffer[index:], handshake.PeerID[:])
 
@@ -55,8 +55,8 @@ func Read(reader io.Reader) (*Handshake, error) {
 	}
 
 	// 解析 handshake 整个消息体
-	const offset = 20 + 20 + 8
-	handshakeBuffer := make([]byte, protocolIdentifierLength + offset)
+	const Offset = 20 + 20 + 8
+	handshakeBuffer := make([]byte, protocolIdentifierLength + Offset)
 	_, err = io.ReadFull(reader, handshakeBuffer)
 	if err != nil {
 		return nil, err

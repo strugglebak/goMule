@@ -28,17 +28,17 @@ func (p Peer) String() string {
 // ---------------------------------------
 // 所以一个 peerSize 就是 6
 func Unmarshal(buffer []byte)([]Peer, error) {
-	const peerSize = 6
-	count := len(buffer) / peerSize
+	const PeerSize = 6
+	count := len(buffer) / PeerSize
 
-	if len(buffer) % peerSize != 0 {
+	if len(buffer) % PeerSize != 0 {
 		err := fmt.Errorf("received malformed peers")
 		return nil, err
 	}
 
 	peers := make([]Peer, count)
 	for i := 0; i < count; i++ {
-		offset := i * peerSize
+		offset := i * PeerSize
 		peers[i].IP = net.IP(buffer[offset : offset+4])
 		peers[i].Port = binary.BigEndian.Uint16(
 			[]byte(buffer[offset+4 : offset+6]),
