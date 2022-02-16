@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	bitField "github.com/strugglebak/goMule/bit_field"
 	handshake "github.com/strugglebak/goMule/handshake"
 	message "github.com/strugglebak/goMule/message"
 )
@@ -57,12 +58,12 @@ func TestCompleteHandshake(t *testing.T) {
 func TestReceiveBitField(t *testing.T) {
 	tests := map[string]struct {
 		msg    []byte
-		output Bitfield
+		output bitField.BitField
 		fails  bool
 	} {
 		"successful bitfield": {
 			msg:    []byte{0x00, 0x00, 0x00, 0x06, 5, 1, 2, 3, 4, 5},
-			output: Bitfield{1, 2, 3, 4, 5},
+			output: bitField.BitField{1, 2, 3, 4, 5},
 			fails:  false,
 		},
 		"message is not a bitfield": {

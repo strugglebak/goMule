@@ -12,13 +12,11 @@ import (
 	peers "github.com/strugglebak/goMule/peers"
 )
 
-type Bitfield bitField.BitField
-
 // Client 是一个 peer 的 TCP 连接
 type Client struct {
 	Conn			net.Conn
 	Choked		bool
-	Bitfield 	Bitfield
+	Bitfield 	bitField.BitField
 	Peer			peers.Peer
 	InfoHash	[20]byte
 	PeerID		[20]byte
@@ -124,7 +122,7 @@ func CompleteHandshake(
 	return response, nil
 }
 
-func ReceiveBitField(conn net.Conn) (Bitfield, error) {
+func ReceiveBitField(conn net.Conn) (bitField.BitField, error) {
 	// 设置 deadline 为 5s
 	conn.SetDeadline(time.Now().Add(5 * time.Second))
 	// 函数结束后禁止 deadline
