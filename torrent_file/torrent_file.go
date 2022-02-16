@@ -2,11 +2,13 @@ package torrentFile
 
 import (
 	"bytes"
+	"crypto/rand"
 	"crypto/sha1"
 	"fmt"
 	"os"
 
 	"github.com/jackpal/bencode-go"
+	"github.com/strugglebak/goMule/p2p"
 )
 
 type TorrentFile struct {
@@ -34,6 +36,47 @@ func Open(filePath string) (TorrentFile, error) {
 		return TorrentFile{}, err
 	}
 	return bt.ToTorrentFile()
+}
+
+func (t *TorrentFile) Download(savePath string, port uint16) error {
+	var peerID [20]byte
+	_, err := rand.Read(peerID[:])
+	if err != nil {
+		return err
+	}
+
+	peers, err := t.RequestPeers(peerID, port)
+	if err != nil {
+		return err
+	}
+
+	torrent := p2p.Torrent{
+		Peers:       peers,
+		PeerID:      peerID,
+		InfoHash:    t.InfoHash,
+		PieceHashes: t.PieceHashes,
+		PieceLength: t.PieceLength,
+		Length:      t.Length,
+		Name:        t.Name,
+	}
+	buffer, err := torrent.Download()
+	if err != nil {
+		return err
+	}
+
+	outFile, err := os.Create(savePath)
+	if err != nil {
+		return err
+	}
+
+	defer outFile.Close()
+
+	_, err = outFile.Write(buffer)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type bencodeInfo struct {

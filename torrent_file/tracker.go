@@ -1,4 +1,4 @@
-package tracker
+package torrentFile
 
 import (
 	"net/http"
@@ -8,17 +8,14 @@ import (
 
 	"github.com/jackpal/bencode-go"
 	peers "github.com/strugglebak/goMule/peers"
-	torrentFile "github.com/strugglebak/goMule/torrent_file"
 )
-
-type TorrentFile torrentFile.TorrentFile
 
 type bencodeTrackerResponse struct {
 	Interval	int			`bencode:"interval"`
 	Peers			string	`bencode:"peers"`
 }
 
-func (torrentFile *TorrentFile) buildTrackerURL(
+func (torrentFile *TorrentFile) BuildTrackerURL(
 	peerID [20]byte,
 	port	 uint16,
 ) (string, error) {
@@ -41,12 +38,12 @@ func (torrentFile *TorrentFile) buildTrackerURL(
 	return baseURL.String(), nil
 }
 
-func (torrentFile *TorrentFile) requestPeers(
+func (torrentFile *TorrentFile) RequestPeers(
 	peerID [20]byte,
 	port	 uint16,
 ) ([] peers.Peer, error) {
 	// 构建 tracker url
-	trackerURL, err := torrentFile.buildTrackerURL(peerID, port)
+	trackerURL, err := torrentFile.BuildTrackerURL(peerID, port)
 	if err != nil {
 		return nil, err
 	}
