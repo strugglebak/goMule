@@ -38,7 +38,7 @@ func Open(filePath string) (TorrentFile, error) {
 	return bt.ToTorrentFile()
 }
 
-func (t *TorrentFile) Download(savePath string, port uint16) error {
+func (t *TorrentFile) DownloadAndSaveTorrentFile(savePath string, port uint16) error {
 	var peerID [20]byte
 	_, err := rand.Read(peerID[:])
 	if err != nil {
