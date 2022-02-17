@@ -14,49 +14,47 @@ import (
 var update = flag.Bool("update", false, "update .golden.json files")
 
 func TestOpen(t *testing.T) {
-	testTorrent, err := Open("../test_data/archlinux-2019.12.01-x86_64.iso.torrent")
+	torrent, err := Open("../test_data/archlinux-2019.12.01-x86_64.iso.torrent")
 	require.Nil(t, err)
 
-	goldenJsonPath := "../test_data/archlinux-2019.12.01-x86_64.iso.torrent.golden.json"
+	goldenPath := "../test_data/archlinux-2019.12.01-x86_64.iso.torrent.golden.json"
 	if *update {
-		serialized, err := json.MarshalIndent(testTorrent, "", "  ")
+		serialized, err := json.MarshalIndent(torrent, "", "  ")
 		require.Nil(t, err)
-		ioutil.WriteFile(goldenJsonPath, serialized, 0644)
+		ioutil.WriteFile(goldenPath, serialized, 0644)
 	}
 
 	expected := TorrentFile{}
-
-	goldenJsonFile, err := ioutil.ReadFile(goldenJsonPath)
+	golden, err := ioutil.ReadFile(goldenPath)
+	require.Nil(t, err)
+	err = json.Unmarshal(golden, &expected)
 	require.Nil(t, err)
 
-	err = json.Unmarshal(goldenJsonFile, &expected)
-	require.Nil(t, err)
-
-	assert.Equal(t, expected, testTorrent)
+	assert.Equal(t, expected, torrent)
 }
 
 func TestToTorrentFile(t *testing.T) {
-	tests := map[string] struct {
-		input 	*bencodeTorrent
-		output	TorrentFile
-		fails		bool
-	} {
+	tests := map[string]struct {
+		input  *bencodeTorrent
+		output TorrentFile
+		fails  bool
+	}{
 		"correct conversion": {
-			input: &bencodeTorrent {
+			input: &bencodeTorrent{
 				Announce: "http://bttracker.debian.org:6969/announce",
-				Info: bencodeInfo {
+				Info: bencodeInfo{
 					Pieces:      "1234567890abcdefghijabcdefghij1234567890",
 					PieceLength: 262144,
 					Length:      351272960,
 					Name:        "debian-10.2.0-amd64-netinst.iso",
 				},
 			},
-			output: TorrentFile {
+			output: TorrentFile{
 				Announce: "http://bttracker.debian.org:6969/announce",
-				InfoHash: [20]byte { 183, 161, 12, 130, 76, 207, 59, 26, 19, 131, 12, 89, 56, 129, 45, 111, 83, 71, 10, 68 },
-				PieceHashes: [][20]byte {
-					{ 49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106 },
-					{ 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48 },
+				InfoHash: [20]byte{216, 247, 57, 206, 195, 40, 149, 108, 204, 91, 191, 31, 134, 217, 253, 207, 219, 168, 206, 182},
+				PieceHashes: [][20]byte{
+					{49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106},
+					{97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48},
 				},
 				PieceLength: 262144,
 				Length:      351272960,
@@ -65,27 +63,27 @@ func TestToTorrentFile(t *testing.T) {
 			fails: false,
 		},
 		"not enough bytes in pieces": {
-			input: &bencodeTorrent {
+			input: &bencodeTorrent{
 				Announce: "http://bttracker.debian.org:6969/announce",
-				Info: bencodeInfo {
-					Pieces:      "1234567890abcdefghijabcdef",
+				Info: bencodeInfo{
+					Pieces:      "1234567890abcdefghijabcdef", // Only 26 bytes
 					PieceLength: 262144,
 					Length:      351272960,
 					Name:        "debian-10.2.0-amd64-netinst.iso",
 				},
 			},
-			output: TorrentFile {},
+			output: TorrentFile{},
 			fails:  true,
 		},
 	}
 
 	for _, test := range tests {
-		torrentFile, err := test.input.ToTorrentFile()
+		to, err := test.input.ToTorrentFile()
 		if test.fails {
 			assert.NotNil(t, err)
 		} else {
 			assert.Nil(t, err)
 		}
-		assert.Equal(t, test.output, torrentFile)
+		assert.Equal(t, test.output, to)
 	}
 }
