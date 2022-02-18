@@ -2,7 +2,7 @@
 一个用 go 实现的 torrent 客户端，基于 go version 1.17.6
 
 ## Features
-- [x] 支持[核心协议](https://www.bittorrent.org/beps/bep_0003.html)
+- [x] 支持 [核心协议](https://www.bittorrent.org/beps/bep_0003.html)
 - [x] 支持下载进度展示
 - [x] 支持 `.torrent` 文件解析
 - [x] 支持解析 `tracker` 响应
