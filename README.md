@@ -27,6 +27,12 @@ go build
 ./goMule debian-11.2.0-amd64-netinst.iso.torrent debian.iso
 ```
 
+## 测试
+
+```bash
+go test -v ./...
+```
+
 ## 截图
 
 ![](./assets/screen_shot.png)
