@@ -5,8 +5,9 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"log"
-	"runtime"
 	"time"
+
+	progressbar "github.com/schollz/progressbar/v3"
 
 	client "github.com/strugglebak/goMule/client"
 	message "github.com/strugglebak/goMule/message"
@@ -40,7 +41,7 @@ func (t *Torrent) StartDownloadWorker(
 
 	c, err := client.BuildClient(peer, t.InfoHash, t.PeerID)
 	if err != nil {
-		log.Printf("Could not handshake with %s. Disconnecting\n", peer.IP)
+		log.Printf("NETWORK ERROR: Could not handshake with %s. Disconnecting!\n", peer.IP)
 		return
 	}
 	defer c.Conn.Close()
@@ -98,6 +99,9 @@ func (t *Torrent) CalculatePieceSize(index int) int {
 
 // 下载整个 torrent，数据存储在内存中
 func (t *Torrent) Download() ([]byte, error) {
+	prompt := "downloading " + t.Name + "..."
+	bar := progressbar.Default(100 * 100, prompt)
+
 	log.Printf("Starting download for %s...", t.Name)
 
 	workQueue := make(chan *pieceWork, len(t.PieceHashes))
@@ -116,6 +120,7 @@ func (t *Torrent) Download() ([]byte, error) {
 	// 将 results 中的数据给 buffer
 	buffer := make([]byte, t.Length)
 	donePieces := 0
+	prevPercent := float64(0)
 	for donePieces < len(t.PieceHashes) {
 		response := <-results
 		begin, end := t.CalculatePieceBounds(response.Index)
@@ -124,13 +129,15 @@ func (t *Torrent) Download() ([]byte, error) {
 
 		percent := float64(donePieces) / float64(len(t.PieceHashes)) * 100
 		// 除了 main thread 的其他 worker 数
-		numWorkers := runtime.NumGoroutine() - 1
-		log.Printf(
-			"(%0.2f%%) Downloaded piece #%d from %d peers\n",
-			percent,
-			response.Index,
-			numWorkers,
-		)
+		// numWorkers := runtime.NumGoroutine() - 1
+		bar.Add(int(percent*100 - float64(prevPercent)*100))
+		// log.Printf(
+		// 	"(%0.2f%%) Downloaded piece #%d from %d peers\n",
+		// 	percent,
+		// 	response.Index,
+		// 	numWorkers,
+		// )
+		prevPercent = percent
 	}
 	close(workQueue)
 
