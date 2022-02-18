@@ -33,11 +33,11 @@ go build
 
 # Roadmaps
 
-- [] 支持 [Fast extension](http://bittorrent.org/beps/bep_0006.html)
-- [] 支持 [磁力链接](http://bittorrent.org/beps/bep_0009.html)
-- [] 支持 [多 tracker](http://bittorrent.org/beps/bep_0012.html)
-- [] 支持 [UDP tracker](http://bittorrent.org/beps/bep_0015.html)
-- [] 支持 [DHT](http://bittorrent.org/beps/bep_0005.html)
-- [] 支持 [PEX](http://bittorrent.org/beps/bep_0011.html)
+- [ ] 支持 [Fast extension](http://bittorrent.org/beps/bep_0006.html)
+- [ ] 支持 [磁力链接](http://bittorrent.org/beps/bep_0009.html)
+- [ ] 支持 [多 tracker](http://bittorrent.org/beps/bep_0012.html)
+- [ ] 支持 [UDP tracker](http://bittorrent.org/beps/bep_0015.html)
+- [ ] 支持 [DHT](http://bittorrent.org/beps/bep_0005.html)
+- [ ] 支持 [PEX](http://bittorrent.org/beps/bep_0011.html)
 
 ...
