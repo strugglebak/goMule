@@ -44,4 +44,4 @@ go build
 
 ## License
 
-MIT
+[MIT](./LICENSE)
