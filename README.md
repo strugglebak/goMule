@@ -211,15 +211,15 @@ type Peer struct {
 
 ```go
 const (
-	MessageChoke          messageID = 0	// 阻塞接收
-	MessageUnChoke        messageID = 1 // 不阻塞接收
-	MessageInterested     messageID = 2 // 有兴趣接收数据
-	MessageNotInterested  messageID = 3 // 没有兴趣接受数据
-	MessageHave           messageID = 4 // 发送者已经下载好了一个 piece
-	MessageBitfield       messageID = 5 // 判断哪些 piece 是 peers 有的，哪些没有
-	MessageRequest        messageID = 6 // 从接收者那里请求一个 message
-	MessagePiece          messageID = 7 // 执行请求，交付一个 piece
-	MessageCancel         messageID = 8 // 取消请求
+  MessageChoke          messageID = 0 // 阻塞接收
+  MessageUnChoke        messageID = 1 // 不阻塞接收
+  MessageInterested     messageID = 2 // 有兴趣接收数据
+  MessageNotInterested  messageID = 3 // 没有兴趣接受数据
+  MessageHave           messageID = 4 // 发送者已经下载好了一个 piece
+  MessageBitfield       messageID = 5 // 判断哪些 piece 是 peers 有的，哪些没有
+  MessageRequest        messageID = 6 // 从接收者那里请求一个 message
+  MessagePiece          messageID = 7 // 执行请求，交付一个 piece
+  MessageCancel         messageID = 8 // 取消请求
 )
 ```
 
@@ -253,9 +253,13 @@ const (
 
 5. 连接吞吐量优化
 
-其实就是进行 pipeline 化，在有多个请求的情况下，对于同一个 socket 来讲，请求之间不用等待对应的响应回来再去执行，而是以一个 FIFO 队列的形式去执行，然后再以 FIFO 队列的形式接收响应，用一个请求一个响应的方式显然是效率很低下了
+其实就是进行 pipeline 化，在有多个请求的情况下，对于同一个 socket 来讲，请求之间不用等待对应的响应回来再去执行，而是以一个 FIFO 队列的形式去执行，然后再以 FIFO 队列的形式接收响应，如下图所示
 
-那么这个算法是怎么样的呢? 需要如下几步
+![](./assets/pipelining.png)
+
+显然，用一个请求一个响应的方式效率非常低下
+
+那么这个算法在 `goMule` 中是怎么实现的呢? 需要如下几步
 
 - 当前 `piece` 数据还没下满，就循环
 - 如果没有阻塞，就发送请求去下载，直到 pipeline 请求限制数已满，或者当前请求下载的 `piece` 数据已满(这都是在 state 状态里面查的)
