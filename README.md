@@ -152,8 +152,8 @@ e
 
 ```go
 type Peer struct {
-	IP 		net.IP
-	Port	uint16
+  IP    net.IP
+  Port  uint16
 }
 ```
 
