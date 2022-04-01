@@ -81,6 +81,7 @@ e
   ```
   l
     145:https://cdimage.debian.org/cdimage/release/11.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-11.2.0-amd64-netinst.iso
+    145:https://cdimage.debian.org/cdimage/archive/11.2.0//srv/cdbuilder.debian.org/dst/deb-cd/weekly-builds/amd64/iso-cd/debian-11.2.0-amd64-netinst.iso
   e
   ```
 - 以 `i` 开头以 `e` 结尾的表示 `integer` 即 *整数*，它的格式就是
