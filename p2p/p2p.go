@@ -97,7 +97,7 @@ func (t *Torrent) CalculatePieceSize(index int) int {
 	return end - begin
 }
 
-// 下载整个 torrent，数据存储在内存中
+// 下载整个 file ，数据存储在内存中
 func (t *Torrent) Download() ([]byte, error) {
 	prompt := "downloading " + t.Name + "..."
 	bar := progressbar.Default(100 * 100, prompt)
@@ -184,8 +184,9 @@ func AttemptDownloadPiece(c *client.Client, pw *pieceWork) ([]byte, error) {
 			}
 		}
 
-		// 请求状态变成 unfulfilled 的了，那么就开始读取响应回来的数据
-		err := state.ReadMessage()
+		// 请求状态变成 unfulfilled 的了，那么就开始解析响应回来的数据
+		// 并更改对应的 message 状态
+		err := state.ChangeState()
 		if err != nil {
 			return nil, err
 		}
@@ -209,9 +210,9 @@ type pieceProgress struct {
 	Client     *client.Client
 	Downloaded int // 从 peer 那里下载了多少个块数据
 	Requested  int // 请求了多少个 byte 的块数据
-	Backlog    int // 还有多少个块数据是没有从 peer 那里下载的，跟 Downloaded 相反
+	Backlog    int // 请求有没有到最大限制(目前是 5 个)
 }
-func (state *pieceProgress) ReadMessage() error {
+func (state *pieceProgress) ChangeState() error {
 	msg, err := state.Client.Read()
 	if err != nil {
 		return err

@@ -18,7 +18,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = tf.DownloadAndSaveTorrentFile(outPath, Port)
+	err = tf.DownloadAndSaveFile(outPath, Port)
 	if err != nil {
 		log.Fatal(err)
 	}

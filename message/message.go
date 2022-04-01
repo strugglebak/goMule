@@ -9,15 +9,15 @@ import (
 type messageID uint8
 
 const (
-	MessageChoke 					messageID = 0	// 阻塞接收
-	MessageUnChoke 				messageID = 1 // 不阻塞接收
-	MessageInterested 		messageID = 2 // 有兴趣接收数据
-	MessageNotInterested 	messageID = 3 // 没有兴趣接受数据
-	MessageHave 					messageID = 4 // 发送者已经下载好了一个 piece
-	MessageBitfield 			messageID = 5 // 对发送者下载好了的一个 piece 进行 encode
-	MessageRequest 				messageID = 6 // 从接收者那里请求一块数据
-	MessagePiece 					messageID = 7 // 执行请求，交付一块数据
-	MessageCancel 				messageID = 8 // 取消请求
+	MessageChoke          messageID = 0	// 阻塞接收
+	MessageUnChoke        messageID = 1 // 不阻塞接收
+	MessageInterested     messageID = 2 // 有兴趣接收数据
+	MessageNotInterested  messageID = 3 // 没有兴趣接受数据
+	MessageHave           messageID = 4 // 发送者已经下载好了一个 piece
+	MessageBitfield       messageID = 5 // 判断哪些 piece 是 peers 有的，哪些没有
+	MessageRequest        messageID = 6 // 从接收者那里请求一个 message
+	MessagePiece          messageID = 7 // 执行请求，交付一个 piece
+	MessageCancel         messageID = 8 // 取消请求
 )
 
 type Message struct {
