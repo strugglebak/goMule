@@ -347,8 +347,7 @@ go test -v ./...
 - [ ] 支持 [UDP tracker](http://bittorrent.org/beps/bep_0015.html)
 - [ ] 支持 [DHT](http://bittorrent.org/beps/bep_0005.html)
 - [ ] 支持 [PEX](http://bittorrent.org/beps/bep_0011.html)
-
-...
+- [ ] ...
 
 ## License
 
