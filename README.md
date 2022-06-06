@@ -1,6 +1,10 @@
 # goMule
 一个用 go 实现的 torrent 客户端，基于 go 1.18
 
+## 运行
+
+![](./assets/animation.gif)
+
 ## 原理
 
 其他原理性部分可参考 [wiki BitTorrent Specification](https://wiki.theory.org/index.php/BitTorrentSpecification)
@@ -335,11 +339,6 @@ go build
 ```bash
 go test -v ./...
 ```
-
-## 截图
-
-![](./assets/screen_shot.png)
-
 ## Roadmaps
 
 - [ ] 支持 [Fast extension](http://bittorrent.org/beps/bep_0006.html)
